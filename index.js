@@ -11,7 +11,6 @@ async function run() {
         console.log("API ready..");
 
         const frontVideoMaterial = {
-            name: "FrontVideoMaterial",
             videoMap: "frontVideoTag",
             emissiveVideoMap: "frontVideoTag",
             emissiveIntensity: 2.0,
@@ -22,33 +21,23 @@ async function run() {
             name: "BackVideoMaterial",
             videoMap: "backVideoTag",
             emissiveVideoMap: "backVideoTag",
-            emissiveIntensity: 2.0,
+            emissiveIntensity: 1.0,
             emissive: "#FFFFFF",
-            alphaVideoMap: "backVideoTag",
+            // alphaVideoMap: "backVideoTag",
         }
 
         try {            
             console.log(await vctrApi.getObjects());
-            const frontObjects = await vctrApi.getObjectsByName("display_front");
-            const backObjects = await vctrApi.getObjectsByName("display_back");
-            
-            // Create material
-            const frontMat = await vctrApi.createMaterial(frontVideoMaterial, frontObjects[0].material);
-            if (frontMat) {
-                await vctrApi.setMaterial("display_front", "FrontVideoMaterial");
-            }
-            const backMaterials = vctrApi.getMaterialsByName(backObjects[0].material);
-            const backMat = await vctrApi.createMaterial(backVideoMaterial, backMaterials[1]);
-            if (backMat) {
-                await vctrApi.setMaterial("display_back", "BackVideoMaterial");
-            }
+
+            vctrApi.updateMaterial("FrontMatOriginal", frontVideoMaterial);
+            vctrApi.updateMaterial("BackMatOriginal", backVideoMaterial);
 
         } catch (e) {
             errHandler(e);
         }
 
     }
-    const vctrApi = new VctrApi("d0769c54-47ee-4ad3-9bdc-a2e711da2d7a", errHandler);
+    const vctrApi = new VctrApi("e4395677-8be7-41a6-a34e-7e0da420a02b", errHandler);
     try {
         await vctrApi.init();
         onReady();
